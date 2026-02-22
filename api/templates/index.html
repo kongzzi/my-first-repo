@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>커피 주문 포인트 시스템</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 30px; }
+        .card { max-width: 520px; border: 1px solid #ddd; border-radius: 8px; padding: 20px; margin-bottom: 16px; }
+        h1 { margin-bottom: 24px; }
+        button { padding: 8px 12px; cursor: pointer; }
+        select, input[type="text"] { padding: 8px; width: 100%; margin: 8px 0 12px; }
+        .msg { background: #f5f7ff; border: 1px solid #ccd5ff; padding: 10px; border-radius: 6px; margin-bottom: 16px; }
+    </style>
+</head>
+<body>
+    <h1>커피 주문 포인트 시스템</h1>
+
+    {% if message %}
+    <div class="msg">{{ message }}</div>
+    {% endif %}
+
+    <div class="card">
+        <h2>1) 고객 확인 / 등록</h2>
+        <form action="/customer" method="post">
+            <label for="phone">전화번호</label>
+            <input id="phone" name="phone" type="text" placeholder="전화번호 입력" required>
+
+            <label>
+                <input type="checkbox" name="register" value="y">
+                신규 고객이면 등록하기
+            </label>
+            <br><br>
+
+            <button type="submit">고객 확인</button>
+        </form>
+
+        {% if phone %}
+        <p>현재 회원: <strong>{{ phone }}</strong> (포인트: {{ current_point }}점)</p>
+        {% else %}
+        <p>현재 상태: 비회원</p>
+        {% endif %}
+    </div>
+
+    <div class="card">
+        <h2>2) 메뉴 주문</h2>
+        <form action="/order" method="post">
+            <label for="choice">메뉴 선택</label>
+            <select id="choice" name="choice" required>
+                <option value="" disabled selected>메뉴를 선택하세요</option>
+                {% for key, item in menu.items() %}
+                <option value="{{ key }}">{{ key }}. {{ item.name }} - {{ item.price }}원</option>
+                {% endfor %}
+            </select>
+            <button type="submit">주문하기</button>
+        </form>
+    </div>
+</body>
+</html>
